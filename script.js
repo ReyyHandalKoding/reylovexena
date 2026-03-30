@@ -1,9 +1,21 @@
+document.addEventListener("DOMContentLoaded", () => {
+
 let data = JSON.parse(localStorage.getItem("singularity")) || {
   point:0, spin:0, exp:0, lvl:1,
   inv:[], lastDaily:0, streak:0, pity:0
 };
 
 const target = 5000;
+
+// ambil element
+const lvl = document.getElementById("lvl");
+const exp = document.getElementById("exp");
+const point = document.getElementById("point");
+const spinCount = document.getElementById("spinCount");
+const inventory = document.getElementById("inventory");
+const claimBtn = document.getElementById("claim");
+const progress = document.getElementById("progress");
+const lb = document.getElementById("lb");
 
 const img = {
   common: "https://cdn-icons-png.flaticon.com/512/616/616494.png",
@@ -25,8 +37,7 @@ function update(){
   point.innerText = data.point;
   spinCount.innerText = data.spin;
 
-  document.getElementById("progress").style.width =
-    Math.min((data.point/target)*100,100) + "%";
+  progress.style.width = Math.min((data.point/target)*100,100) + "%";
 
   inventory.innerHTML = data.inv.slice(-10).map(i =>
     `<div class="item ${i.rarity}">
@@ -36,21 +47,21 @@ function update(){
   ).join("");
 
   if(data.point >= target){
-    claim.style.display="inline-block";
+    claimBtn.style.display = "inline-block";
   }
 
   genLB();
 }
 
-function misi(){
+window.misi = function(){
   data.spin += 3;
   save(); update();
 }
 
-function daily(){
+window.daily = function(){
   let now = Date.now();
   if(now - data.lastDaily < 86400000){
-    alert("Udah claim 😹");
+    alert("Udah diclaim, rakus bet dah");
     return;
   }
 
@@ -63,14 +74,13 @@ function daily(){
   save(); update();
 }
 
-function spin(x){
+window.spin = function(x){
   if(data.spin < x){
-    alert("Spin kurang 😹");
+    alert("Spin kurang 💔");
     return;
   }
 
   data.spin -= x;
-
   animateSpin(x);
 }
 
@@ -106,16 +116,16 @@ function roll(){
   }
 
   if(r<0.5){
-    item = {name:"Common Chip", img:img.common, rarity:"common", p:rand(10,30)};
+    item = {name:"Common Chip 🍂", img:img.common, rarity:"common", p:rand(10,30)};
     data.pity++;
   } else if(r<0.8){
-    item = {name:"Rare Token", img:img.rare, rarity:"rare", p:rand(30,80)};
+    item = {name:"Rare Token 🧭", img:img.rare, rarity:"rare", p:rand(30,80)};
     data.pity++;
   } else if(r<0.95){
-    item = {name:"Epic Card", img:img.epic, rarity:"epic", p:rand(80,150)};
+    item = {name:"Epic Card 🃏", img:img.epic, rarity:"epic", p:rand(80,150)};
     data.pity++;
   } else {
-    item = {name:"SINGULARITY CORE 🗿", img:img.legend, rarity:"legend", p:rand(200,400)};
+    item = {name:"SINGULARITY PIZZA 🤤", img:img.legend, rarity:"legend", p:rand(200,400)};
     data.pity = 0;
   }
 
@@ -133,7 +143,7 @@ function rand(min,max){
   return Math.floor(Math.random()*(max-min+1))+min;
 }
 
-function claim(){
+window.claim = function(){
   document.body.innerHTML = `
     <h1>🎁 Opening Mystery Box...</h1>
     <img src="${img.box}" width="150">
@@ -146,12 +156,14 @@ function claim(){
 
 function genLB(){
   let fake = [
-    "DewaSpin - 12000",
-    "AnakHoki - 9500",
-    "SlotMaster - 8700",
+    "ReyDewaGacorr - 12000",
+    "XenaKukuruyuk - 9500",
+    "bigmo - 8700",
     "You - " + data.point
   ];
   lb.innerHTML = fake.join("<br>");
 }
 
 update();
+
+});

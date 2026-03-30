@@ -9,6 +9,7 @@ body {
   width: 90%;
   max-width: 400px;
   border-radius: 12px;
+  margin: 10px;
 }
 
 button {
@@ -50,7 +51,7 @@ button {
 .epic { color: violet; }
 .legend { color: gold; text-shadow: 0 0 10px gold; }
 
-/* progress bar */
+/* progress */
 .progress-box {
   width: 80%;
   height: 20px;

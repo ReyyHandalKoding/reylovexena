@@ -1,79 +1,72 @@
-body {
+body{
   margin:0;
-  background:#000;
+  background:black;
   color:white;
   font-family:Arial;
 }
 
-.container {
+.container{
   max-width:420px;
   margin:auto;
   padding:15px;
   text-align:center;
 }
 
-.banner {
+.banner{
   width:100%;
   border-radius:10px;
 }
 
-.stats {
+.stats{
   display:flex;
   justify-content:space-between;
-  font-size:14px;
 }
 
-.btn {
-  padding:12px;
+button{
+  padding:10px;
   margin:5px;
   border:none;
   border-radius:10px;
-  font-weight:bold;
   width:45%;
 }
 
-.btn-group {
-  display:flex;
-  justify-content:space-between;
+#claim{
+  display:none;
+  width:100%;
+  background:gold;
 }
 
-.spin { background:gold; }
-.spin10 { background:orange; }
-.daily { background:lime; width:100%; }
-.claim { background:gold; display:none; width:100%; }
-
-#inventory {
+#inventory{
   border:1px solid #333;
-  padding:10px;
   max-height:150px;
   overflow:auto;
 }
 
-.item {
+.item{
   display:flex;
   gap:10px;
   margin:5px;
   background:#111;
   padding:5px;
-  border-radius:8px;
 }
 
-.item img { width:40px; }
+.item img{
+  width:40px;
+}
 
-.common { color:gray; }
-.rare { color:cyan; }
-.epic { color:violet; }
-.legend { color:gold; text-shadow:0 0 8px gold; }
+/* warna rarity */
+.common{ color:#8B4513; }
+.rare{ color:#00bfff; }
+.epic{ color:#a020f0; }
+.legend{ color:gold; text-shadow:0 0 8px gold; }
 
-.progress-box {
+.progress-box{
   width:100%;
   height:10px;
   background:#222;
-  margin:10px 0;
 }
 
-#progress {
+#progress{
   height:100%;
-  width:0%;
   background:lime;
 }

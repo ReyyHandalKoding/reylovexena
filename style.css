@@ -9,7 +9,6 @@ body {
   width: 90%;
   max-width: 400px;
   border-radius: 12px;
-  margin: 10px;
 }
 
 button {
@@ -29,7 +28,7 @@ button {
 #inventory {
   border: 1px solid #333;
   padding: 10px;
-  max-height: 150px;
+  max-height: 160px;
   overflow-y: auto;
 }
 
@@ -43,4 +42,26 @@ button {
 .item img {
   width: 45px;
   border-radius: 8px;
+}
+
+/* rarity */
+.common { color: gray; }
+.rare { color: cyan; }
+.epic { color: violet; }
+.legend { color: gold; text-shadow: 0 0 10px gold; }
+
+/* progress bar */
+.progress-box {
+  width: 80%;
+  height: 20px;
+  background: #222;
+  margin: auto;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+#progress {
+  height: 100%;
+  width: 0%;
+  background: lime;
 }

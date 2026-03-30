@@ -1,11 +1,10 @@
 let data = JSON.parse(localStorage.getItem("singularity")) || {
-  point:0, shard:0, spin:0, exp:0, lvl:1,
-  inv:[], lastDaily:0, streak:0
+  point:0, spin:0, exp:0, lvl:1,
+  inv:[], lastDaily:0, streak:0, pity:0
 };
 
 const target = 5000;
 
-// gambar dari internet (casino + item + mystery box)
 const img = {
   common: "https://cdn-icons-png.flaticon.com/512/616/616494.png",
   rare: "https://cdn-icons-png.flaticon.com/512/2583/2583344.png",
@@ -14,27 +13,30 @@ const img = {
   box: "https://cdn-icons-png.flaticon.com/512/679/679720.png"
 };
 
+const sound = new Audio("https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3");
+
 function save(){
   localStorage.setItem("singularity", JSON.stringify(data));
 }
 
 function update(){
-  document.getElementById("lvl").innerText = data.lvl;
-  document.getElementById("exp").innerText = data.exp;
-  document.getElementById("point").innerText = data.point;
-  document.getElementById("shard").innerText = data.shard;
-  document.getElementById("spinCount").innerText = data.spin;
+  lvl.innerText = data.lvl;
+  exp.innerText = data.exp;
+  point.innerText = data.point;
+  spinCount.innerText = data.spin;
 
-  document.getElementById("inventory").innerHTML =
-    data.inv.slice(-10).map(i =>
-      `<div class="item">
-        <img src="${i.img}">
-        <span>${i.name}</span>
-      </div>`
-    ).join("");
+  document.getElementById("progress").style.width =
+    Math.min((data.point/target)*100,100) + "%";
+
+  inventory.innerHTML = data.inv.slice(-10).map(i =>
+    `<div class="item ${i.rarity}">
+      <img src="${i.img}">
+      <span>${i.name}</span>
+    </div>`
+  ).join("");
 
   if(data.point >= target){
-    document.getElementById("claim").style.display = "inline-block";
+    claim.style.display="inline-block";
   }
 
   genLB();
@@ -42,22 +44,20 @@ function update(){
 
 function misi(){
   data.spin += 3;
-  alert("Misi kelar, dapet spin 😹");
   save(); update();
 }
 
 function daily(){
   let now = Date.now();
   if(now - data.lastDaily < 86400000){
-    alert("Udah claim njing 😹");
+    alert("Udah claim 😹");
     return;
   }
 
   data.lastDaily = now;
   data.streak++;
 
-  let reward = 100 + (data.streak*20);
-  data.point += reward;
+  data.point += 100 + data.streak*20;
   data.spin += 2;
 
   save(); update();
@@ -71,30 +71,56 @@ function spin(x){
 
   data.spin -= x;
 
-  for(let i=0;i<x;i++){
-    roll();
-  }
+  animateSpin(x);
+}
 
-  save(); update();
+function animateSpin(x){
+  let i = 0;
+  let int = setInterval(()=>{
+    i++;
+    document.title = "🎰 Spinning...";
+
+    if(i > 10){
+      clearInterval(int);
+
+      sound.currentTime = 0;
+      sound.play();
+
+      for(let j=0;j<x;j++){
+        roll();
+      }
+
+      save(); update();
+      document.title = "🎰 Gacha Singularity";
+    }
+  },100);
 }
 
 function roll(){
   let r = Math.random();
   let item;
 
+  if(data.pity >= 20){
+    r = 1;
+    data.pity = 0;
+  }
+
   if(r<0.5){
-    item = {name:"Common Chip", img:img.common, p:rand(10,30), s:0};
+    item = {name:"Common Chip", img:img.common, rarity:"common", p:rand(10,30)};
+    data.pity++;
   } else if(r<0.8){
-    item = {name:"Rare Token", img:img.rare, p:rand(30,80), s:5};
+    item = {name:"Rare Token", img:img.rare, rarity:"rare", p:rand(30,80)};
+    data.pity++;
   } else if(r<0.95){
-    item = {name:"Epic Card", img:img.epic, p:rand(80,150), s:10};
+    item = {name:"Epic Card", img:img.epic, rarity:"epic", p:rand(80,150)};
+    data.pity++;
   } else {
-    item = {name:"SINGULARITY CORE 🗿", img:img.legend, p:rand(200,400), s:25};
+    item = {name:"SINGULARITY CORE 🗿", img:img.legend, rarity:"legend", p:rand(200,400)};
+    data.pity = 0;
   }
 
   data.inv.push(item);
   data.point += item.p;
-  data.shard += item.s;
   data.exp += item.p;
 
   if(data.exp >= data.lvl*300){
@@ -108,10 +134,14 @@ function rand(min,max){
 }
 
 function claim(){
-  alert("🎁 Lu buka Mystery Box...");
+  document.body.innerHTML = `
+    <h1>🎁 Opening Mystery Box...</h1>
+    <img src="${img.box}" width="150">
+  `;
+
   setTimeout(()=>{
     window.location.href = "https://chat.whatsapp.com/FkaAIFKS9ypK62izhdL6EO?mode=gi_t";
-  },1500);
+  },2000);
 }
 
 function genLB(){
@@ -121,7 +151,7 @@ function genLB(){
     "SlotMaster - 8700",
     "You - " + data.point
   ];
-  document.getElementById("lb").innerHTML = fake.join("<br>");
+  lb.innerHTML = fake.join("<br>");
 }
 
 update();

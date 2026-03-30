@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Gacha Singularity 🌌</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>🎰 Gacha Singularity</h1>
+
+<img class="banner" src="https://images.unsplash.com/photo-1606167668584-78701c57f13d" />
+
+<p>Level: <span id="lvl">1</span> | EXP: <span id="exp">0</span></p>
+<p>Point: <span id="point">0</span> | Shard: <span id="shard">0</span></p>
+<p>Spin: <span id="spinCount">0</span></p>
+
+<button onclick="spin(1)">SPIN x1</button>
+<button onclick="spin(10)">SPIN x10</button>
+
+<h3>Misi</h3>
+<button onclick="misi()">Subscribe / Follow</button>
+
+<h3>Daily Reward</h3>
+<button onclick="daily()">CLAIM</button>
+
+<br>
+<button id="claim" onclick="claim()">🎁 BUKA MYSTERY BOX</button>
+
+<h3>Inventory</h3>
+<div id="inventory"></div>
+
+<h3>Leaderboard</h3>
+<div id="lb"></div>
+
+<script src="script.js"></script>
+</body>
+</html>

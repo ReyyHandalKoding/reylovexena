@@ -2,41 +2,46 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🎰 Gacha Singularity</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+
+<div class="container">
 
 <h1>🎰 Gacha Singularity</h1>
 
-<img class="banner" src="https://files.catbox.moe/fevfy8.jpg">
+<img class="banner" src="https://images.unsplash.com/photo-1511512578047-dfb367046420">
 
 <div class="progress-box">
   <div id="progress"></div>
 </div>
 
-<p>Level: <span id="lvl">1</span> | EXP: <span id="exp">0</span></p>
-<p>Point: <span id="point">0</span> / 5000</p>
-<p>Spin: <span id="spinCount">0</span></p>
+<div class="stats">
+  <p>🎖️ Lv <span id="lvl">1</span></p>
+  <p>💰 <span id="point">0</span>/5000</p>
+  <p>🎟️ <span id="spinCount">0</span></p>
+</div>
 
-<button onclick="spin(1)">SPIN x1</button>
-<button onclick="spin(10)">SPIN x10</button>
+<div class="btn-group">
+  <button class="btn spin" onclick="spin(1)">🎰 SPIN</button>
+  <button class="btn spin10" onclick="spin(10)">💥 x10</button>
+</div>
 
-<h3>Misi</h3>
-<button onclick="misi()">Subscribe / Follow</button>
+<h3>🎯 Misi</h3>
+<div id="missionList"></div>
 
-<h3>Daily</h3>
-<button onclick="daily()">CLAIM</button>
+<button class="btn daily" onclick="daily()">🎁 Daily</button>
+<button id="claim" class="btn claim" onclick="claim()">🎁 Mystery Box</button>
 
-<br>
-<button id="claim" onclick="claim()">🎁 BUKA MYSTERY BOX</button>
-
-<h3>Inventory</h3>
+<h3>🎴 Inventory</h3>
 <div id="inventory"></div>
 
-<h3>Leaderboard</h3>
+<h3>🏆 Leaderboard</h3>
 <div id="lb"></div>
+
+</div>
 
 <script src="script.js"></script>
 </body>

@@ -1,167 +1,194 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", ()=>{
 
-let data = JSON.parse(localStorage.getItem("singularity")) || {
-  point:0, spin:0, exp:0, lvl:1,
-  inv:[], lastDaily:0, streak:0, pity:0
+let data = JSON.parse(localStorage.getItem("gacha")) || {
+  point:0, spin:0, lvl:1, exp:0,
+  inv:[], pity:0, lastDaily:0
 };
 
 const target = 5000;
 
-// ambil element
+// sound
+const click = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
+const sfx = {
+  common:new Audio("https://assets.mixkit.co/active_storage/sfx/270/270-preview.mp3"),
+  rare:new Audio("https://assets.mixkit.co/active_storage/sfx/272/272-preview.mp3"),
+  epic:new Audio("https://assets.mixkit.co/active_storage/sfx/273/273-preview.mp3"),
+  legend:new Audio("https://assets.mixkit.co/active_storage/sfx/276/276-preview.mp3")
+};
+
+// gambar
+const pool = {
+  common:[
+    {name:"Rusty Coin",img:"https://picsum.photos/seed/a/100"},
+    {name:"Broken Chip",img:"https://picsum.photos/seed/b/100"}
+  ],
+  rare:[
+    {name:"Neon Token",img:"https://picsum.photos/seed/c/100"},
+    {name:"Energy Cube",img:"https://picsum.photos/seed/d/100"}
+  ],
+  epic:[
+    {name:"Quantum Core",img:"https://picsum.photos/seed/e/100"}
+  ],
+  legend:[
+    {name:"🔥 GOD CORE 🔥",img:"https://picsum.photos/seed/f/100"}
+  ]
+};
+
+// misi
+const missions = [
+  {id:1,name:"📺 Subscribe",reward:3},
+  {id:2,name:"🎵 Follow TikTok",reward:3},
+  {id:3,name:"📸 Instagram",reward:2}
+];
+
+// DOM
 const lvl = document.getElementById("lvl");
-const exp = document.getElementById("exp");
 const point = document.getElementById("point");
 const spinCount = document.getElementById("spinCount");
 const inventory = document.getElementById("inventory");
-const claimBtn = document.getElementById("claim");
 const progress = document.getElementById("progress");
-const lb = document.getElementById("lb");
+const claimBtn = document.getElementById("claim");
+const missionList = document.getElementById("missionList");
 
-const img = {
-  common: "https://cdn-icons-png.flaticon.com/512/616/616494.png",
-  rare: "https://cdn-icons-png.flaticon.com/512/2583/2583344.png",
-  epic: "https://cdn-icons-png.flaticon.com/512/3523/3523887.png",
-  legend: "https://cdn-icons-png.flaticon.com/512/3132/3132693.png",
-  box: "https://cdn-icons-png.flaticon.com/512/679/679720.png"
-};
-
-const sound = new Audio("https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3");
-
+// save
 function save(){
-  localStorage.setItem("singularity", JSON.stringify(data));
+  localStorage.setItem("gacha",JSON.stringify(data));
 }
 
+// update
 function update(){
-  lvl.innerText = data.lvl;
-  exp.innerText = data.exp;
-  point.innerText = data.point;
-  spinCount.innerText = data.spin;
+  lvl.innerText=data.lvl;
+  point.innerText=data.point;
+  spinCount.innerText=data.spin;
 
-  progress.style.width = Math.min((data.point/target)*100,100) + "%";
+  progress.style.width=(data.point/target*100)+"%";
 
-  inventory.innerHTML = data.inv.slice(-10).map(i =>
-    `<div class="item ${i.rarity}">
+  inventory.innerHTML=data.inv.slice(-10).map(i=>`
+    <div class="item ${i.rarity}">
       <img src="${i.img}">
       <span>${i.name}</span>
-    </div>`
-  ).join("");
+    </div>
+  `).join("");
 
-  if(data.point >= target){
-    claimBtn.style.display = "inline-block";
-  }
+  if(data.point>=target) claimBtn.style.display="block";
 
-  genLB();
+  renderMisi();
 }
 
-window.misi = function(){
-  data.spin += 3;
-  save(); update();
+// misi
+function renderMisi(){
+  missionList.innerHTML=missions.map(m=>`
+    <button class="btn" onclick="doMission(${m.id})">
+      ${m.name} (+${m.reward})
+    </button>
+  `).join("");
 }
 
-window.daily = function(){
-  let now = Date.now();
-  if(now - data.lastDaily < 86400000){
-    alert("Udah diclaim, rakus bet dah");
-    return;
-  }
-
-  data.lastDaily = now;
-  data.streak++;
-
-  data.point += 100 + data.streak*20;
-  data.spin += 2;
-
-  save(); update();
+window.doMission=(id)=>{
+  click.play();
+  let m=missions.find(x=>x.id===id);
+  data.spin+=m.reward;
+  save();update();
 }
 
-window.spin = function(x){
-  if(data.spin < x){
-    alert("Spin kurang 💔");
-    return;
-  }
+// spin
+window.spin=(x)=>{
+  click.play();
+  if(data.spin<x) return alert("Spin kurang 💔");
 
-  data.spin -= x;
-  animateSpin(x);
+  data.spin-=x;
+  let hasil=[];
+
+  for(let i=0;i<x;i++) hasil.push(roll());
+
+  showResult(hasil);
+  save();update();
 }
 
-function animateSpin(x){
-  let i = 0;
-  let int = setInterval(()=>{
-    i++;
-    document.title = "🎰 Spinning...";
-
-    if(i > 10){
-      clearInterval(int);
-
-      sound.currentTime = 0;
-      sound.play();
-
-      for(let j=0;j<x;j++){
-        roll();
-      }
-
-      save(); update();
-      document.title = "🎰 Gacha Singularity";
-    }
-  },100);
-}
-
+// roll
 function roll(){
-  let r = Math.random();
+  let r=Math.random();
   let item;
 
-  if(data.pity >= 20){
-    r = 1;
-    data.pity = 0;
-  }
+  if(data.pity>=20){r=1;data.pity=0;}
 
   if(r<0.5){
-    item = {name:"Common Chip 🍂", img:img.common, rarity:"common", p:rand(10,30)};
-    data.pity++;
-  } else if(r<0.8){
-    item = {name:"Rare Token 🧭", img:img.rare, rarity:"rare", p:rand(30,80)};
-    data.pity++;
-  } else if(r<0.95){
-    item = {name:"Epic Card 🃏", img:img.epic, rarity:"epic", p:rand(80,150)};
-    data.pity++;
-  } else {
-    item = {name:"SINGULARITY PIZZA 🤤", img:img.legend, rarity:"legend", p:rand(200,400)};
-    data.pity = 0;
+    item=pick(pool.common); item.rarity="common"; data.pity++;
+  }else if(r<0.8){
+    item=pick(pool.rare); item.rarity="rare"; data.pity++;
+  }else if(r<0.95){
+    item=pick(pool.epic); item.rarity="epic"; data.pity++;
+  }else{
+    item=pick(pool.legend); item.rarity="legend"; data.pity=0;
   }
 
+  item={...item};
   data.inv.push(item);
-  data.point += item.p;
-  data.exp += item.p;
+  data.point+=Math.floor(Math.random()*100)+20;
 
-  if(data.exp >= data.lvl*300){
-    data.exp = 0;
-    data.lvl++;
+  return item;
+}
+
+function pick(arr){
+  return arr[Math.floor(Math.random()*arr.length)];
+}
+
+// popup hasil
+function showResult(items){
+  let div=document.createElement("div");
+  div.style.position="fixed";
+  div.style.top="0";
+  div.style.width="100%";
+  div.style.height="100%";
+  div.style.background="black";
+  div.style.display="flex";
+  div.style.flexDirection="column";
+  div.style.justifyContent="center";
+  div.style.alignItems="center";
+  document.body.appendChild(div);
+
+  let i=0;
+  function next(){
+    if(i>=items.length){setTimeout(()=>div.remove(),1000);return;}
+    let it=items[i];
+
+    div.innerHTML=`
+      <h2>${it.rarity.toUpperCase()}</h2>
+      <img src="${it.img}" width="120">
+      <p>${it.name}</p>
+    `;
+
+    sfx[it.rarity].play();
+
+    i++;
+    setTimeout(next,1000);
   }
+  next();
 }
 
-function rand(min,max){
-  return Math.floor(Math.random()*(max-min+1))+min;
+// daily
+window.daily=()=>{
+  click.play();
+  let now=Date.now();
+  if(now-data.lastDaily<86400000) return alert("Udah claim bang, buset dh rakus bet 😭");
+
+  data.lastDaily=now;
+  data.spin+=3;
+  data.point+=100;
+
+  save();update();
 }
 
-window.claim = function(){
-  document.body.innerHTML = `
-    <h1>🎁 Opening Mystery Box...</h1>
-    <img src="${img.box}" width="150">
+// claim
+window.claim=()=>{
+  click.play();
+  document.body.innerHTML=`
+    <h1>🎁 Opening...</h1>
+    <img src="https://cdn-icons-png.flaticon.com/512/679/679720.png" width="150">
   `;
-
   setTimeout(()=>{
-    window.location.href = "https://chat.whatsapp.com/FkaAIFKS9ypK62izhdL6EO?mode=gi_t";
+    window.location.href="https://chat.whatsapp.com/FkaAIFKS9ypK62izhdL6EO?mode=gi_t";
   },2000);
-}
-
-function genLB(){
-  let fake = [
-    "ReyDewaGacorr - 12000",
-    "XenaKukuruyuk - 9500",
-    "bigmo - 8700",
-    "You - " + data.point
-  ];
-  lb.innerHTML = fake.join("<br>");
 }
 
 update();

@@ -21,35 +21,35 @@ const sfx={
 // (POOL LU TETEP — ga gw ubah, biar ga ribet)
 const pool={...JSON.parse(JSON.stringify({
   common:[
-    {name:"🪵 Kayu Lapuk",img:"https://files.catbox.moe/e5ddh1.jpeg"},
-    {name:"🪙 Koin Kusam",img:"https://files.catbox.moe/6vkk3x.jpeg"},
-    {name:"📦 Kotak Tua",img:"https://files.catbox.moe/pzkugd.jpeg"},
-    {name:"🔩 Baut Karat",img:"https://files.catbox.moe/u6z9k9.jpeg"},
-    {name:"📜 Kertas Sobek",img:"https://files.catbox.moe/bo9h3z.jpeg"},
-    {name:"🧱 Batu Retak",img:"https://files.catbox.moe/wfr5ho.jpeg"},
-    {name:"🪶 Bulu Usang",img:"https://files.catbox.moe/jaw2d9.webp"},
-    {name:"🥾 Sepatu Bekas",img:"https://files.catbox.moe/wqd11n.jpeg"}
+    {name:"Kayu Lapuk 🪵",img:"https://files.catbox.moe/e5ddh1.jpeg"},
+    {name:"Koin Kusam 🪙",img:"https://files.catbox.moe/6vkk3x.jpeg"},
+    {name:"Kotak Tua 🥡",img:"https://files.catbox.moe/pzkugd.jpeg"},
+    {name:"Baut Karat 🔩",img:"https://files.catbox.moe/u6z9k9.jpeg"},
+    {name:"Kertas Sobek 📄",img:"https://files.catbox.moe/bo9h3z.jpeg"},
+    {name:"Batu Retak 🪨",img:"https://files.catbox.moe/wfr5ho.jpeg"},
+    {name:"Bulu Usang 🪶",img:"https://files.catbox.moe/jaw2d9.webp"},
+    {name:"Sepatu Bekas 🥾",img:"https://files.catbox.moe/wqd11n.jpeg"}
   ],
   rare:[
-    {name:"💎 Kristal Biru",img:"https://files.catbox.moe/nzvjjw.jpeg"},
-    {name:"🔷 Core Biru",img:"https://files.catbox.moe/epynie.jpg"},
-    {name:"📘 Buku jurus rahasia",img:"https://files.catbox.moe/ogeyki.jpeg"},
-    {name:"⚙️ Gear Neon",img:"https://files.catbox.moe/yx4nwu.jpeg"},
-    {name:"💠 Token Elite",img:"https://files.catbox.moe/xqizuq.jpg"}
+    {name:"Kristal Biru 💎",img:"https://files.catbox.moe/nzvjjw.jpeg"},
+    {name:"Core Biru 🧿",img:"https://files.catbox.moe/epynie.jpg"},
+    {name:"Buku jurus rahasia 📖",img:"https://files.catbox.moe/ogeyki.jpeg"},
+    {name:"Gear Neon ⚙️",img:"https://files.catbox.moe/yx4nwu.jpeg"},
+    {name:"Token Elite 🌀",img:"https://files.catbox.moe/xqizuq.jpg"}
   ],
   epic:[
-    {name:"⚡ Plasma Core",img:"https://files.catbox.moe/sl87s9.jpeg"},
-    {name:"🌌 Fragmen Void",img:"https://files.catbox.moe/2gk261.png"},
-    {name:"🧬 DNA Mutan",img:"https://files.catbox.moe/w8tr3c.png"},
-    {name:"🔮 Orb Misterius",img:"https://files.catbox.moe/afkaol.jpg"}
+    {name:"Plasma Core ⚛️",img:"https://files.catbox.moe/sl87s9.jpeg"},
+    {name:"Fragmen Void 💽",img:"https://files.catbox.moe/2gk261.png"},
+    {name:"DNA Mutan 🧬",img:"https://files.catbox.moe/w8tr3c.png"},
+    {name:"Orb Misterius ⚗️",img:"https://files.catbox.moe/afkaol.jpg"}
   ],
   legend:[
-    {name:"👑 Raja Singularity",img:"https://files.catbox.moe/i1ldc8.png"},
-    {name:"🔥 Core Dewa",img:"https://files.catbox.moe/zs7z8u.jpeg"},
-    {name:"⚡ Entitas Abadi",img:"https://files.catbox.moe/47reba.jpeg"}
+    {name:"Raja Singularity 🛟",img:"https://files.catbox.moe/i1ldc8.png"},
+    {name:"Core Dewa ✨",img:"https://files.catbox.moe/zs7z8u.jpeg"},
+    {name:"Entitas Abadi 👾",img:"https://files.catbox.moe/47reba.jpeg"}
   ],
   secret:[
-{name:"💀 Artifact Terlarang",img:"https://files.catbox.moe/47reba.jpeg"}
+{name:"Artifact Terlarang 👺",img:"https://files.catbox.moe/ftpgor.jpg"}
 ]
 }))};
 
@@ -104,7 +104,7 @@ save();update();
 
 window.spin=(x)=>{
 click.play();
-if(data.spin<x) return alert("Spin kurang 😹");
+if(data.spin<x) return alert("Spin kurang kock 🤭");
 
 data.spin-=x;
 for(let i=0;i<x;i++) roll();

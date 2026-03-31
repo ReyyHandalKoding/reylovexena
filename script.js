@@ -14,7 +14,8 @@ const sfx={
   common:new Audio("https://assets.mixkit.co/active_storage/sfx/270/270-preview.mp3"),
   rare:new Audio("https://assets.mixkit.co/active_storage/sfx/272/272-preview.mp3"),
   epic:new Audio("https://assets.mixkit.co/active_storage/sfx/273/273-preview.mp3"),
-  legend:new Audio("https://assets.mixkit.co/active_storage/sfx/276/276-preview.mp3")
+  legend:new Audio("https://assets.mixkit.co/active_storage/sfx/276/276-preview.mp3"),
+  secret:new Audio("https://assets.mixkit.co/active_storage/sfx/277/277-preview.mp3"),
 };
 
 // (POOL LU TETEP — ga gw ubah, biar ga ribet)
@@ -46,7 +47,10 @@ const pool={...JSON.parse(JSON.stringify({
     {name:"👑 Raja Singularity",img:"https://files.catbox.moe/i1ldc8.png"},
     {name:"🔥 Core Dewa",img:"https://files.catbox.moe/zs7z8u.jpeg"},
     {name:"⚡ Entitas Abadi",img:"https://files.catbox.moe/47reba.jpeg"}
-  ]
+  ],
+  secret:[
+{name:"💀 Artifact Terlarang",img:"https://files.catbox.moe/47reba.jpeg"}
+]
 }))};
 
 // DOM
@@ -111,12 +115,40 @@ save();update();
 function roll(){
 let r=Math.random(),item;
 
-if(data.pity>=20){r=1;data.pity=0;}
+// SECRET (super langka)
+if(r < 0.000001){
+  item=pick(pool.secret);
+  item.rarity="secret";
+  data.pity=0;
+}
 
-if(r<0.5){item=pick(pool.common);item.rarity="common";data.pity++;}
-else if(r<0.8){item=pick(pool.rare);item.rarity="rare";data.pity++;}
-else if(r<0.95){item=pick(pool.epic);item.rarity="epic";data.pity++;}
-else{item=pick(pool.legend);item.rarity="legend";data.pity=0;}
+// LEGEND
+else if(r<0.01){
+  item=pick(pool.legend);
+  item.rarity="legend";
+  data.pity=0;
+}
+
+// EPIC
+else if(r<0.1){
+  item=pick(pool.epic);
+  item.rarity="epic";
+  data.pity++;
+}
+
+// RARE
+else if(r<0.4){
+  item=pick(pool.rare);
+  item.rarity="rare";
+  data.pity++;
+}
+
+// COMMON
+else{
+  item=pick(pool.common);
+  item.rarity="common";
+  data.pity++;
+}
 
 item={...item};
 data.inv.push(item);

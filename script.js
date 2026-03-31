@@ -11,7 +11,7 @@ const target=5000;
 const click = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
 
 // BGM
-const bgm = new Audio("https://image2url.com/r2/default/audio/1774921005485-aed516cd-2508-4645-aa77-2b6dbcd65eb2.mp3");
+const bgm = new Audio("https://files.catbox.moe/4eq3kl.mp3");
 bgm.loop = true;
 bgm.volume = 0.4;
 

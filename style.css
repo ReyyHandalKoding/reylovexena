@@ -60,6 +60,11 @@ button{
 .rare{ color:#00bfff; }
 .epic{ color:#a020f0; }
 .legend{ color:gold; text-shadow:0 0 8px gold; }
+.secret{
+  color:red;
+  text-shadow:0 0 10px red, 0 0 20px red;
+  font-weight:bold;
+}
 
 .progress-box{
   width:100%;

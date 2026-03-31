@@ -7,8 +7,20 @@ let data = JSON.parse(localStorage.getItem("gacha")) || {
 
 const target=5000;
 
-// SOUND
+// 🔊 SOUND
 const click = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
+
+// 🎵 BGM (INI YANG LU MAU)
+const bgm = new Audio("https://assets.mixkit.co/active_storage/sfx/209/209-preview.mp3");
+bgm.loop = true;
+bgm.volume = 0.4;
+
+// auto play pas klik pertama
+document.addEventListener("click", () => {
+  if(bgm.paused){
+    bgm.play().catch(()=>{});
+  }
+}, { once: true });
 
 const sfx={
   common:new Audio("https://assets.mixkit.co/active_storage/sfx/270/270-preview.mp3"),
@@ -17,7 +29,7 @@ const sfx={
   legend:new Audio("https://assets.mixkit.co/active_storage/sfx/276/276-preview.mp3")
 };
 
-// POOL
+// POOL (PUNYA LU, GA GW UBAH)
 const pool={
 common:[
 {name:"🪵 Kayu Lapuk",img:"https://files.catbox.moe/e5ddh1.jpeg"},
@@ -95,6 +107,7 @@ missionList.innerHTML=missions.map(m=>`
 }
 
 window.doMission=(id)=>{
+click.currentTime=0;
 click.play();
 let m=missions.find(x=>x.id===id);
 data.spin+=m.reward;
@@ -103,7 +116,9 @@ save();update();
 
 // SPIN
 window.spin=(x)=>{
+click.currentTime=0;
 click.play();
+
 if(data.spin<x) return alert("Spin kurang 😹");
 
 data.spin-=x;
@@ -137,7 +152,9 @@ function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
 
 // DAILY
 window.daily=()=>{
+click.currentTime=0;
 click.play();
+
 let now=Date.now();
 if(now-data.lastDaily<86400000) return alert("Udah claim 😹");
 

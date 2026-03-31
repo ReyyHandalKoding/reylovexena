@@ -31,12 +31,6 @@ button{
   font-weight:bold;
 }
 
-.bgm-btn{
-  width:100%;
-  background:#333;
-  color:white;
-}
-
 #claim{
   display:none;
   width:100%;

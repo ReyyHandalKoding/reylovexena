@@ -28,6 +28,13 @@ button{
   border:none;
   border-radius:10px;
   width:45%;
+  font-weight:bold;
+}
+
+.bgm-btn{
+  width:100%;
+  background:#333;
+  color:white;
 }
 
 #claim{
@@ -54,7 +61,7 @@ button{
   width:40px;
 }
 
-/* warna rarity */
+/* rarity */
 .common{ color:#8B4513; }
 .rare{ color:#00bfff; }
 .epic{ color:#a020f0; }

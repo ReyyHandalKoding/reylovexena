@@ -10,26 +10,6 @@ const target=5000;
 // SOUND
 const click = new Audio("https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3");
 
-// BGM
-const bgm = new Audio("https://assets.mixkit.co/active_storage/sfx/209/209-preview.mp3");
-bgm.loop = true;
-bgm.volume = 0.4;
-
-// autoplay pas klik pertama
-document.addEventListener("click", ()=>{
-  if(bgm.paused){
-    bgm.play().catch(()=>{});
-  }
-}, { once:true });
-
-window.toggleBGM = ()=>{
-  if(bgm.paused){
-    bgm.play();
-  } else {
-    bgm.pause();
-  }
-};
-
 const sfx={
   common:new Audio("https://assets.mixkit.co/active_storage/sfx/270/270-preview.mp3"),
   rare:new Audio("https://assets.mixkit.co/active_storage/sfx/272/272-preview.mp3"),

@@ -82,10 +82,10 @@ async function getData(){
 }
 
 async function saveData(newData, sha){
-  await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE}`,{
+  const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE}`,{
     method:"PUT",
     headers:{
-      "Authorization":"token "+TOKEN,
+      "Authorization":"Bearer "+TOKEN,
       "Content-Type":"application/json"
     },
     body:JSON.stringify({
@@ -94,6 +94,9 @@ async function saveData(newData, sha){
       sha:sha
     })
   });
+
+  const result = await res.json();
+  console.log(result); // 🔥 ini penting
 }
 
 // ================= LOGIN =================

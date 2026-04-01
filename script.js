@@ -1,5 +1,12 @@
 document.addEventListener("DOMContentLoaded",()=>{
 
+// 🔥 CONFIG GITHUB
+const REPO = "reyyhandalkoding/reylovexena";
+const TOKEN = "TOKEN_LU";
+const FILE = "data.json";
+
+let currentUser=null;
+
 let data = JSON.parse(localStorage.getItem("gacha")) || {
   point:0, spin:10, lvl:1, exp:0,
   inv:[], pity:0, lastDaily:0
@@ -18,8 +25,8 @@ const sfx={
   secret:new Audio("https://assets.mixkit.co/active_storage/sfx/277/277-preview.mp3"),
 };
 
-// (POOL LU TETEP — ga gw ubah, biar ga ribet)
-const pool={...JSON.parse(JSON.stringify({
+// 🔥 POOL LU (UDAH DIPASANG)
+const pool =...JSON.parse(JSON.stringify({
   common:[
     {name:"Kayu Lapuk 🪵",img:"https://files.catbox.moe/e5ddh1.jpeg"},
     {name:"Koin Kusam 🪙",img:"https://files.catbox.moe/6vkk3x.jpeg"},
@@ -49,9 +56,9 @@ const pool={...JSON.parse(JSON.stringify({
     {name:"Entitas Abadi 👾",img:"https://files.catbox.moe/47reba.jpeg"}
   ],
   secret:[
-{name:"Artifact Terlarang 👺",img:"https://files.catbox.moe/ftpgor.jpg"}
-]
-}))};
+    {name:"Artifact Terlarang 👺",img:"https://files.catbox.moe/ftpgor.jpg"}
+  ]
+}));
 
 // DOM
 const lvl=document.getElementById("lvl");
@@ -64,6 +71,83 @@ const missionList=document.getElementById("missionList");
 
 function save(){localStorage.setItem("gacha",JSON.stringify(data));}
 
+// ================= API =================
+async function getData(){
+  const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE}`);
+  const json = await res.json();
+  return {
+    data: JSON.parse(atob(json.content)),
+    sha: json.sha
+  };
+}
+
+async function saveData(newData, sha){
+  await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE}`,{
+    method:"PUT",
+    headers:{
+      "Authorization":"token "+TOKEN,
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+      message:"update leaderboard",
+      content:btoa(JSON.stringify(newData)),
+      sha:sha
+    })
+  });
+}
+
+// ================= LOGIN =================
+window.login = async ()=>{
+  let username = prompt("Username");
+  let password = prompt("Password");
+
+  let {data:db, sha} = await getData();
+
+  let user = db.users.find(u=>u.name===username);
+
+  if(user){
+    if(user.pass===password){
+      currentUser=user;
+      alert("Login sukses 😹");
+    } else {
+      alert("Password salah");
+    }
+  } else {
+    let newUser={name:username,pass:password,point:0};
+    db.users.push(newUser);
+    await saveData(db, sha);
+    currentUser=newUser;
+    alert("Akun dibuat 😹");
+  }
+
+  updateLB();
+};
+
+// ================= LEADERBOARD =================
+async function updateLB(){
+  let {data:db} = await getData();
+
+  let top = db.users.sort((a,b)=>b.point-a.point).slice(0,5);
+
+  document.getElementById("lb").innerHTML =
+    top.map(u=>`${u.name} - ${u.point}`).join("<br>");
+}
+
+// ================= SAVE SCORE =================
+async function saveScore(){
+  if(!currentUser) return;
+
+  let {data:db, sha} = await getData();
+
+  let user = db.users.find(u=>u.name===currentUser.name);
+  if(user){
+    user.point = data.point;
+  }
+
+  await saveData(db, sha);
+}
+
+// ================= UPDATE =================
 function update(){
 lvl.innerText=data.lvl;
 point.innerText=data.point;
@@ -79,10 +163,11 @@ inventory.innerHTML=data.inv.slice(-10).map(i=>`
 
 if(data.point>=target) claimBtn.style.display="block";
 
-genLB();
+updateLB();
 renderMisi();
 }
 
+// ================= MISSION =================
 const missions=[
 {id:1,name:"📺 Subscribe",reward:3},
 {id:2,name:"🎵 TikTok",reward:3},
@@ -102,52 +187,42 @@ data.spin+=m.reward;
 save();update();
 };
 
+// ================= SPIN =================
 window.spin=(x)=>{
 click.play();
-if(data.spin<x) return alert("Spin kurang kock 🤭");
+if(data.spin<x) return alert("Spin kurang 😹");
 
 data.spin-=x;
 for(let i=0;i<x;i++) roll();
 
-save();update();
+save();
+saveScore();
+update();
 };
 
+// ================= ROLL =================
 function roll(){
 let r=Math.random(),item;
 
-// SECRET (super langka)
-if(r < 0.000001){
+if(r<0.0001){
   item=pick(pool.secret);
   item.rarity="secret";
-  data.pity=0;
 }
-
-// LEGEND
 else if(r<0.01){
   item=pick(pool.legend);
   item.rarity="legend";
-  data.pity=0;
 }
-
-// EPIC
 else if(r<0.1){
   item=pick(pool.epic);
   item.rarity="epic";
-  data.pity++;
 }
-
-// RARE
 else if(r<0.4){
   item=pick(pool.rare);
   item.rarity="rare";
-  data.pity++;
 }
-
-// COMMON
 else{
   item=pick(pool.common);
   item.rarity="common";
-  data.pity++;
 }
 
 item={...item};
@@ -160,10 +235,11 @@ sfx[item.rarity].play();
 
 function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
 
+// ================= DAILY =================
 window.daily=()=>{
 click.play();
 let now=Date.now();
-if(now-data.lastDaily<86400000) return alert("Udah claim 😹");
+if(now-data.lastDaily<86400000) return alert("Udah claim bang, rakus bet dah");
 
 data.lastDaily=now;
 data.spin+=3;
@@ -172,6 +248,7 @@ data.point+=100;
 save();update();
 };
 
+// ================= CLAIM =================
 window.claim=()=>{
 click.play();
 document.body.innerHTML=`<h1>🎁 Opening...</h1>`;
@@ -179,14 +256,6 @@ setTimeout(()=>{
 window.location.href="https://chat.whatsapp.com/FkaAIFKS9ypK62izhdL6EO?mode=gi_t";
 },2000);
 };
-
-function genLB(){
-document.getElementById("lb").innerHTML=`
-DewaSpin - 12000<br>
-AnakHoki - 9000<br>
-You - ${data.point}
-`;
-}
 
 update();
 

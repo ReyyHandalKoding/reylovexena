@@ -8,37 +8,18 @@ body{
 .container{
   max-width:420px;
   margin:auto;
-  padding:15px;
+  padding:10px;
   text-align:center;
 }
 
-.banner{
-  width:100%;
-  border-radius:10px;
-}
-
-.stats{
-  display:flex;
-  justify-content:space-between;
-}
-
 button{
-  padding:10px;
   margin:5px;
+  padding:10px;
   border:none;
   border-radius:10px;
-  width:45%;
-  font-weight:bold;
-}
-
-#claim{
-  display:none;
-  width:100%;
-  background:gold;
 }
 
 #inventory{
-  border:1px solid #333;
   max-height:150px;
   overflow:auto;
 }
@@ -46,8 +27,8 @@ button{
 .item{
   display:flex;
   gap:10px;
-  margin:5px;
   background:#111;
+  margin:5px;
   padding:5px;
 }
 
@@ -55,15 +36,13 @@ button{
   width:40px;
 }
 
-/* rarity */
-.common{ color:#8B4513; }
-.rare{ color:#00bfff; }
-.epic{ color:#a020f0; }
-.legend{ color:gold; text-shadow:0 0 8px gold; }
+.common{color:#8B4513;}
+.rare{color:#00bfff;}
+.epic{color:#a020f0;}
+.legend{color:gold;}
 .secret{
   color:red;
-  text-shadow:0 0 10px red, 0 0 20px red;
-  font-weight:bold;
+  text-shadow:0 0 10px red;
 }
 
 .progress-box{
@@ -75,4 +54,8 @@ button{
 #progress{
   height:100%;
   background:lime;
+}
+
+#claim{
+  display:none;
 }

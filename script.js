@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
 // 🔥 CONFIG GITHUB
 const REPO = "reyyhandalkoding/reylovexena";
-const TOKEN = "TOKEN_LU";
+const TOKEN = "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";
 const FILE = "data.json";
 
 let currentUser=null;
